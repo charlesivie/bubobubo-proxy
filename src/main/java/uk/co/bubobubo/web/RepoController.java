@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpStatusCodeException;
 import uk.co.bubobubo.service.SesameProxyService;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -20,15 +21,16 @@ public class RepoController {
 	@Autowired
 	private SesameProxyService proxyService;
 
-	@RequestMapping(value="/{repoId}", method = RequestMethod.GET)
+	@RequestMapping(value="/{repoId}")
 	public void proxyGetRequest(
 			@PathVariable("repoId") String repoId,
 			@RequestParam Map<String, String> parameters,
 			@RequestHeader HttpHeaders headers,
-			HttpServletResponse response
+			HttpServletResponse response,
+			HttpServletRequest request
 	) throws URISyntaxException, IOException {
 
-		proxyService.flushSesameResponse("/repositories/" + repoId, HttpMethod.GET, parameters, headers, response);
+		proxyService.flushSesameResponse("/repositories/" + repoId, HttpMethod.valueOf(request.getMethod().toUpperCase()), parameters, headers, response);
 
 	}
 
