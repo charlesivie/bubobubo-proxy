@@ -30,7 +30,13 @@ public class RepoController {
 			HttpServletRequest request
 	) throws URISyntaxException, IOException {
 
-		proxyService.flushSesameResponse("/repositories/" + repoId, HttpMethod.valueOf(request.getMethod().toUpperCase()), parameters, headers, response);
+		proxyService.flushSesameResponse(
+                "/repositories/" + repoId,
+                HttpMethod.valueOf(request.getMethod().toUpperCase()),
+                parameters,
+                headers,
+                response
+        );
 
 	}
 
