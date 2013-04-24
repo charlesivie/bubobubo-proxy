@@ -6,6 +6,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpStatusCodeException;
 import uk.co.bubobubo.service.SesameProxyService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,5 +48,18 @@ public class RepoController {
         response.sendError(403, "Remove repositories through the control panel at sparqlr.com");
     }
 
+	@ExceptionHandler(HttpStatusCodeException.class)
+	public
+	@ResponseBody
+	String handleException(HttpStatusCodeException exception, HttpServletResponse response) throws IOException {
+
+		response.setStatus(exception.getStatusCode().value());
+
+		for (Map.Entry<String, String> entry : exception.getResponseHeaders().toSingleValueMap().entrySet()) {
+			response.addHeader(entry.getKey(), entry.getValue());
+		}
+
+		return exception.getResponseBodyAsString();
+	}
 
 }

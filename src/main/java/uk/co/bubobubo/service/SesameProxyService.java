@@ -80,18 +80,6 @@ public class SesameProxyService {
 	}
 
 
-	@ExceptionHandler(HttpStatusCodeException.class)
-	public
-	@ResponseBody
-	String handleException(HttpStatusCodeException exception, HttpServletResponse response) throws IOException {
 
-		response.setStatus(exception.getStatusCode().value());
-
-		for (Map.Entry<String, String> entry : exception.getResponseHeaders().toSingleValueMap().entrySet()) {
-			response.addHeader(entry.getKey(), entry.getValue());
-		}
-
-		return exception.getResponseBodyAsString();
-	}
 
 }
