@@ -44,7 +44,6 @@ public class RepoController {
     public void handleDelete(HttpServletResponse response) throws IOException {
 
         response.sendError(401, "Remove repositories through the control panel at sparqlr.com");
-        response.flushBuffer();
     }
 
 	@ExceptionHandler(HttpStatusCodeException.class)
