@@ -40,6 +40,13 @@ public class RepoController {
 
 	}
 
+    @RequestMapping(value="/{repoId}", method = RequestMethod.DELETE)
+    public void handleDelete(HttpServletResponse response) throws IOException {
+
+        response.sendError(401, "Remove repositories through the control panel at sparqlr.com");
+        response.flushBuffer();
+    }
+
 	@ExceptionHandler(HttpStatusCodeException.class)
 	public @ResponseBody String handleException(HttpStatusCodeException exception, HttpServletResponse response) throws IOException {
 
