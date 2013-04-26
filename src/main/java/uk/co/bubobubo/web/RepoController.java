@@ -43,6 +43,27 @@ public class RepoController {
 
 	}
 
+	@RequestMapping(value="/{repoId}/contexts")
+	public void proxyContext(
+			@PathVariable("repoId") String repoId,
+			@RequestParam Map<String, String> parameters,
+			@RequestHeader HttpHeaders headers,
+			HttpServletResponse response,
+			HttpServletRequest request,
+			@RequestBody Resource resource
+	) throws URISyntaxException, IOException {
+
+		proxyService.flushSesameResponse(
+				"/repositories/" + repoId + "/contexts",
+				HttpMethod.valueOf(request.getMethod().toUpperCase()),
+				parameters,
+				headers,
+				resource,
+				response
+		);
+
+	}
+
     @RequestMapping(value="/{repoId}", method = RequestMethod.DELETE)
     public void handleDelete(HttpServletResponse response) throws IOException {
         response.sendError(403, "Remove repositories through the control panel at sparqlr.com");
