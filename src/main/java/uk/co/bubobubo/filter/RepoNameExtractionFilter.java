@@ -10,7 +10,7 @@ import javax.servlet.*;
 import java.io.IOException;
 import java.util.Collection;
 
-public class RoleExtractionFilter implements Filter {
+public class RepoNameExtractionFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
