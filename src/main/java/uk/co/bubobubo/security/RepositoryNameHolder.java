@@ -3,15 +3,15 @@ package uk.co.bubobubo.security;
 import java.util.HashSet;
 import java.util.Set;
 
-public class RepositoryRoleHolder {
+public class RepositoryNameHolder {
 
     private Set<String> roleNames;
 
-    public RepositoryRoleHolder() {
+    public RepositoryNameHolder() {
         this(new HashSet<String>());
     }
 
-    public RepositoryRoleHolder(Set<String> roleNames) {
+    public RepositoryNameHolder(Set<String> roleNames) {
         this.roleNames = roleNames;
     }
 
