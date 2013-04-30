@@ -8,7 +8,7 @@
 
     <http use-expressions="true" authentication-manager-ref="authenticationManager" create-session="stateless">
         <intercept-url pattern="/protocol" access="permitAll()"/>
-        <!--<intercept-url pattern="/repositories/**" access="hasRole(request.getAttribute('repositoryId'))"/>-->
+        <intercept-url pattern="/repositories/**" access="hasRole(request.getAttribute('repositoryId'))"/>
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <http-basic entry-point-ref="restAuthenticationEntryPoint" />
     </http>
