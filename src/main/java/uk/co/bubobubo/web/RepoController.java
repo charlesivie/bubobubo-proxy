@@ -16,15 +16,13 @@ import java.net.URISyntaxException;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/repositories")
 public class RepoController {
 
 	@Autowired
 	private SesameProxyService proxyService;
 
-	@RequestMapping(value="/{repoId}")
-	public void proxyGetRequest(
-			@PathVariable("repoId") String repoId,
+	@RequestMapping(value="/**")
+	public void repoQueryWithId(
 			@RequestParam Map<String, String> parameters,
 			@RequestHeader HttpHeaders headers,
 			HttpServletResponse response,
@@ -33,28 +31,7 @@ public class RepoController {
 	) throws URISyntaxException, IOException {
 
 		proxyService.flushSesameResponse(
-                "/repositories/" + repoId,
-                HttpMethod.valueOf(request.getMethod().toUpperCase()),
-                parameters,
-                headers,
-				resource,
-                response
-        );
-
-	}
-
-	@RequestMapping(value="/{repoId}/contexts")
-	public void proxyContext(
-			@PathVariable("repoId") String repoId,
-			@RequestParam Map<String, String> parameters,
-			@RequestHeader HttpHeaders headers,
-			HttpServletResponse response,
-			HttpServletRequest request,
-			@RequestBody Resource resource
-	) throws URISyntaxException, IOException {
-
-		proxyService.flushSesameResponse(
-				"/repositories/" + repoId + "/contexts",
+				request.getPathInfo(),
 				HttpMethod.valueOf(request.getMethod().toUpperCase()),
 				parameters,
 				headers,
@@ -64,7 +41,7 @@ public class RepoController {
 
 	}
 
-    @RequestMapping(value="/{repoId}", method = RequestMethod.DELETE)
+    @RequestMapping(value="/repositories/{repoId}", method = RequestMethod.DELETE)
     public void handleDelete(HttpServletResponse response) throws IOException {
         response.sendError(403, "Remove repositories through the control panel at sparqlr.com");
     }

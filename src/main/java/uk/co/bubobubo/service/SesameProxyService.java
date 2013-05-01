@@ -75,11 +75,4 @@ public class SesameProxyService {
 
 	}
 
-	public void flushSesameResponse(String path, HttpMethod method, HttpServletResponse response) throws IOException {
-		flushSesameResponse(path, method, Collections.<String, String>emptyMap(), null, null, response);
-	}
-
-
-
-
 }

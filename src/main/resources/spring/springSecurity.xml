@@ -7,7 +7,7 @@
                     http://www.springframework.org/schema/security/spring-security-3.1.xsd">
 
     <http use-expressions="true" authentication-manager-ref="authenticationManager" create-session="stateless">
-        <intercept-url pattern="/repositories/**" access="hasRole(request.getAttribute('repositoryId')) or hasRole('USER')"/>
+        <intercept-url pattern="/repositories/**" access="hasRole(request.getAttribute('repositoryId'))"/>
         <http-basic entry-point-ref="restAuthenticationEntryPoint" />
     </http>
 
