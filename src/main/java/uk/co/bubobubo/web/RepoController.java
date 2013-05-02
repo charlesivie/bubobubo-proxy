@@ -41,6 +41,11 @@ public class RepoController {
 
 	}
 
+	@RequestMapping(value="/repositories", method = RequestMethod.GET)
+	public void handleGetRepoList(HttpServletResponse response) throws IOException {
+		response.sendError(403, "The repository list is unavailable on the shared sparqlr environment, login to sparqlr.com to see your repository list");
+	}
+
     @RequestMapping(value="/repositories/{repoId}", method = RequestMethod.DELETE)
     public void handleDelete(HttpServletResponse response) throws IOException {
         response.sendError(403, "Remove repositories through the control panel at sparqlr.com");
