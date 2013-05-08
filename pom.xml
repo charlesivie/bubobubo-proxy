@@ -147,6 +147,15 @@
                 </filters>
             </build>
         </profile>
+
+        <profile>
+            <id>live</id>
+            <build>
+                <filters>
+                    <filter>src/main/resources/properties/environment/live.properties</filter>
+                </filters>
+            </build>
+        </profile>
     </profiles>
 
 </project>
