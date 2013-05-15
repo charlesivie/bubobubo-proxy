@@ -1,22 +1,24 @@
 package uk.co.bubobubo.service;
 
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
-import java.util.Collections;
+import java.net.URI;
 import java.util.Map;
 
 @Service
@@ -34,18 +36,35 @@ public class SesameProxyService {
 			final HttpServletResponse response
 	) throws IOException {
 
-		RestTemplate restTemplate = new RestTemplate();
-
-		UriBuilder uri = UriBuilder.fromUri(sesameUrl + path);
+		UriBuilder uriBuilder = UriBuilder.fromUri(sesameUrl + path);
 
 		for (Map.Entry<String, String> param : parameters.entrySet()) {
-			uri.queryParam(param.getKey(), UriUtils.encodeQuery(param.getValue(), "UTF-8"));
+			uriBuilder.queryParam(param.getKey(), UriUtils.encodeQuery(param.getValue(), "UTF-8"));
 		}
+
+		URI uri = uriBuilder.build();
+
+		RestTemplate restTemplate;
+		if (uri.getUserInfo() != null && !uri.getUserInfo().equalsIgnoreCase("")) {
+
+			DefaultHttpClient httpClient = new DefaultHttpClient();
+			BasicCredentialsProvider credentialsProvider = new BasicCredentialsProvider();
+			credentialsProvider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(
+					uri.getUserInfo().split(":")[0],
+					uri.getUserInfo().split(":")[1]
+			));
+			httpClient.setCredentialsProvider(credentialsProvider);
+			HttpComponentsClientHttpRequestFactory httpComponentsClientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory(httpClient);
+			restTemplate = new RestTemplate(httpComponentsClientHttpRequestFactory);
+		} else {
+			restTemplate = new RestTemplate();
+		}
+
 
 		ResponseEntity<String> responseEntity;
 		if (resource != null && resource.exists() && resource.contentLength() > 0) {
 			responseEntity = restTemplate.exchange(
-					uri.build(),
+					uri,
 					method,
 					new HttpEntity<Resource>(resource, headers),
 					String.class
@@ -53,7 +72,7 @@ public class SesameProxyService {
 		} else {
 
 			responseEntity = restTemplate.exchange(
-					uri.build(),
+					uri,
 					method,
 					new HttpEntity<Resource>(headers),
 					String.class

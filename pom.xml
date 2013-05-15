@@ -68,6 +68,11 @@
             <version>1.2.14</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.2.1</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -153,6 +158,15 @@
             <build>
                 <filters>
                     <filter>src/main/resources/properties/environment/live.properties</filter>
+                </filters>
+            </build>
+        </profile>
+
+        <profile>
+            <id>smoke</id>
+            <build>
+                <filters>
+                    <filter>src/main/resources/properties/environment/smoke.properties</filter>
                 </filters>
             </build>
         </profile>
