@@ -1,10 +1,11 @@
 <beans:beans xmlns="http://www.springframework.org/schema/security"
              xmlns:beans="http://www.springframework.org/schema/beans"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:context="http://www.springframework.org/schema/context"
              xsi:schemaLocation="http://www.springframework.org/schema/beans
                     http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
                     http://www.springframework.org/schema/security
-                    http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+                    http://www.springframework.org/schema/security/spring-security-3.1.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <http use-expressions="true" authentication-manager-ref="authenticationManager" create-session="stateless">
         <intercept-url pattern="/repositories/**" access="hasRole(request.getAttribute('repositoryId'))"/>
@@ -32,5 +33,17 @@
                                WHERE U.username_da=?" />
         </authentication-provider>
     </authentication-manager>
+
+    <context:component-scan base-package="uk.co.bubobubo" />
+
+    <context:property-placeholder location="classpath*:properties/default.properties"/>
+
+    <beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+        <beans:property name="driverClassName" value="${db.connection.driver_class}"/>
+        <beans:property name="url" value="${BUBOBUBO_CONNECTION_URL}"/>
+        <beans:property name="username" value="${BUBOBUBO_USER}"/>
+        <beans:property name="password" value="${BUBOBUBO_PASSWORD}"/>
+    </beans:bean>
+
 
 </beans:beans>
