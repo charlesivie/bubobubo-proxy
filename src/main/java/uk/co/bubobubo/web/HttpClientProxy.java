@@ -20,7 +20,6 @@ import org.apache.http.*;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.AbortableHttpRequest;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.client.utils.URIUtils;
@@ -91,8 +90,6 @@ public class HttpClientProxy extends HttpServlet {
         if (doLogStr != null) {
             this.doLog = Boolean.parseBoolean(doLogStr);
         }
-
-        Credentials credentials = null;
 
         try {
             Properties properties = new Properties();
