@@ -34,9 +34,7 @@
         </authentication-provider>
     </authentication-manager>
 
-    <context:component-scan base-package="uk.co.bubobubo" />
-
-    <context:property-placeholder location="classpath*:properties/default.properties"/>
+    <context:property-placeholder system-properties-mode="FALLBACK" location="classpath*:properties/default.properties"/>
 
     <beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
         <beans:property name="driverClassName" value="${db.connection.driver_class}"/>
