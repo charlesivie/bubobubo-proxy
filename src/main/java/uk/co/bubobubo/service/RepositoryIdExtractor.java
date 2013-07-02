@@ -7,7 +7,7 @@ public class RepositoryIdExtractor {
 
 	private static final String DEFAULT_REPOSITORY_REGEX = "/repositories/([^/]+)/?";
 
-	public String extractRepositoryId(String path) {
+	public static String extractRepositoryId(final String path) {
 
 		Pattern p = Pattern.compile(DEFAULT_REPOSITORY_REGEX);
 		Matcher m = p.matcher(path);

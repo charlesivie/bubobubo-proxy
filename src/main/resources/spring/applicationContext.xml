@@ -1,21 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:security="http://www.springframework.org/schema/security"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
-    <context:component-scan base-package="uk.co.bubobubo" />
+    <context:component-scan base-package="uk.co.bubobubo"/>
 
     <context:property-placeholder location="classpath*:properties/default.properties"/>
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource" >
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="${db.connection.driver_class}"/>
         <property name="url" value="${BUBOBUBO_CONNECTION_URL}"/>
         <property name="username" value="${BUBOBUBO_USER}"/>
         <property name="password" value="${BUBOBUBO_PASSWORD}"/>
     </bean>
+
+    <security:http use-expressions="true" authentication-manager-ref="authenticationManager" create-session="stateless">
+        <security:intercept-url
+                pattern="/repositories/**"
+                access="hasRole(request.getAttribute('repositoryId'))"
+                />
+        <security:http-basic entry-point-ref="restAuthenticationEntryPoint"/>
+    </security:http>
+
+    <bean id="loggerListener" class="org.springframework.security.authentication.event.LoggerListener"/>
+
+    <!-- Configure Authentication mechanism -->
+    <security:authentication-manager alias="authenticationManager" id="authenticationManager">
+        <security:authentication-provider>
+            <security:password-encoder ref="twoWayPasswordEncoder"/>
+            <security:jdbc-user-service data-source-ref="dataSource"
+                                        users-by-username-query="
+                               SELECT U.username_da AS username,
+                               U.password_da as password,
+                               U.enabled_da as enabled
+                               FROM SecureUser U where U.username_da=?"
+                                        authorities-by-username-query="
+                               SELECT U.username_da as username,
+                               A.name_da as authority
+                               FROM SecureUser U
+                               left join SecureUser_SecureRole UA on U.id=UA.SecureUser_id
+                               left join SecureRole A on UA.roles_id = A.id
+                               WHERE U.username_da=?"/>
+        </security:authentication-provider>
+    </security:authentication-manager>
 
 </beans>

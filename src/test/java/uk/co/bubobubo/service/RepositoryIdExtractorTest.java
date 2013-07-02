@@ -7,13 +7,11 @@ import static org.junit.Assert.assertThat;
 
 public class RepositoryIdExtractorTest {
 
-	RepositoryIdExtractor extractor = new RepositoryIdExtractor();
-
 	@Test
 	public void extractRepositoryId_should_find_a_repositoryID() {
 
 		String input = "/repositories/test-repo-1/contexts";
-		String actual = extractor.extractRepositoryId(input);
+		String actual = RepositoryIdExtractor.extractRepositoryId(input);
 
 		String expected = "test-repo-1";
 

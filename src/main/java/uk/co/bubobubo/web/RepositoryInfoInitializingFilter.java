@@ -1,14 +1,20 @@
 package uk.co.bubobubo.web;
 
-import uk.co.bubobubo.service.RepositoryIdExtractor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import uk.co.bubobubo.service.RepositoryService;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
-public class RepositoryIdFilter implements Filter {
+import static uk.co.bubobubo.service.RepositoryIdExtractor.extractRepositoryId;
 
-    private RepositoryIdExtractor repositoryIdExtractor = new RepositoryIdExtractor();
+@Component
+public class RepositoryInfoInitializingFilter implements Filter {
+
+	@Autowired
+	private RepositoryService repositoryService;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -19,9 +25,11 @@ public class RepositoryIdFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
-        String repositoryId =
-                repositoryIdExtractor.extractRepositoryId(((HttpServletRequest)servletRequest).getPathInfo());
-        servletRequest.setAttribute("repositoryId", repositoryId);
+        String repositoryId = extractRepositoryId(((HttpServletRequest) servletRequest).getPathInfo());
+
+		servletRequest.setAttribute("repoInfo", repositoryService.getRepositoryInfo(repositoryId));
+		servletRequest.setAttribute("repositoryId", repositoryId);
+
         filterChain.doFilter(servletRequest, servletResponse);
     }
 
