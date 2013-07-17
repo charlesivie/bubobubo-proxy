@@ -1,7 +1,6 @@
 package uk.co.bubobubo.web;
 
 import org.springframework.stereotype.Component;
-import uk.co.bubobubo.domain.RepoInfo;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -20,7 +19,7 @@ public class ForbiddenOperationsFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
-		RepoInfo repoInfo = (RepoInfo) servletRequest.getAttribute("repoInfo");
+		String repositoryId = (String) servletRequest.getAttribute("repositoryId");
 
         HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
         HttpServletResponse httpServletResponse = (HttpServletResponse) servletResponse;
@@ -28,7 +27,7 @@ public class ForbiddenOperationsFilter implements Filter {
         String pathInfo = httpServletRequest.getPathInfo();
 
         if (httpServletRequest.getMethod().equalsIgnoreCase("DELETE")
-                && pathInfo.equalsIgnoreCase("/repositories/" + repoInfo.getId())) {
+                && pathInfo.equalsIgnoreCase("/repositories/" + repositoryId)) {
             httpServletResponse.setStatus(403);
             httpServletResponse.flushBuffer();
         } else {
