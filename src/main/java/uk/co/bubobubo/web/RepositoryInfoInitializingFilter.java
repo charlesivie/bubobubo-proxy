@@ -12,9 +12,7 @@ import static uk.co.bubobubo.service.RepositoryIdExtractor.extractRepositoryId;
 public class RepositoryInfoInitializingFilter implements Filter {
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void init(FilterConfig filterConfig) throws ServletException {}
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
@@ -28,7 +26,5 @@ public class RepositoryInfoInitializingFilter implements Filter {
     }
 
     @Override
-    public void destroy() {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
+    public void destroy() {}
 }
